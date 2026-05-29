@@ -1,0 +1,159 @@
+{
+  "info": {
+    "name": "Sistema de Pagos API",
+    "description": "Colección para probar los endpoints del Sistema de Pagos.\n\nVariables de entorno:\n- {{base_url}}: http://localhost:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Tiene data.id', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data.id).to.exist;",
+              "  pm.collectionVariables.set('usuario_id', json.data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users"]
+        }
+      }
+    },
+    {
+      "name": "Crear Usuario - Error duplicado",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users"]
+        }
+      }
+    },
+    {
+      "name": "Crear Tarjeta",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Tiene data.id', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data.id).to.exist;",
+              "  pm.collectionVariables.set('tarjeta_id', json.data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"numero\": \"4111111111111111\",\n  \"titular\": \"Juan Pérez\",\n  \"expiracion\": \"12/2028\",\n  \"cvv\": \"123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users/{{usuario_id}}/cards",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users", "{{usuario_id}}", "cards"]
+        }
+      }
+    },
+    {
+      "name": "Crear Pago",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Pago procesado', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(['approved', 'rejected']).to.include(json.data.estado);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario_id\": {{usuario_id}},\n  \"tarjeta_id\": {{tarjeta_id}},\n  \"monto\": 1500.50\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/payments",
+          "host": ["{{base_url}}"],
+          "path": ["api", "payments"]
+        }
+      }
+    },
+    {
+      "name": "Listar Pagos del Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Es un arreglo', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/users/{{usuario_id}}/payments",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users", "{{usuario_id}}", "payments"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "usuario_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tarjeta_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

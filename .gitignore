@@ -1,0 +1,16 @@
+# Dependencies
+api/node_modules/
+service/.venv/
+service/app/__pycache__/
+service/**/__pycache__/
+
+# Env files (keep .env.example, ignore .env with real credentials)
+api/.env
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project files to exclude
+AGENTS.md
+prueba_tecnica_backend.pdf
