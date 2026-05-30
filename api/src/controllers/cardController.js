@@ -3,6 +3,10 @@ const { validationResult } = require('express-validator');
 const db = require('../db/queries');
 
 const CARD_SECRET = process.env.CARD_SECRET;
+if (!CARD_SECRET) {
+  console.error('CARD_SECRET no está definido en las variables de entorno');
+  process.exit(1);
+}
 
 exports.createCard = async (req, res, next) => {
   try {

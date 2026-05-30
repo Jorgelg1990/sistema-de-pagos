@@ -50,9 +50,11 @@ npm run dev
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | POST | `/api/users` | Crear usuario |
+| GET | `/api/users/:id` | Obtener usuario por ID |
 | POST | `/api/users/:id/cards` | Registrar tarjeta |
 | POST | `/api/payments` | Crear pago |
 | GET | `/api/users/:id/payments` | Historial de pagos |
+| GET | `/api/users/:id/payments/stats` | Estadísticas de pagos |
 
 ### POST /api/users
 
@@ -88,15 +90,33 @@ npm run dev
 { "data": [ { "id": 1, "monto": 1500.50, "estado": "approved", "mensaje": "...", "created_at": "..." } ] }
 ```
 
+### GET /api/users/:id
+
+```json
+// Response 200
+{ "data": { "id": 1, "nombre": "Juan Pérez", "email": "juan@example.com", "created_at": "..." } }
+// Response 404
+{ "error": "Usuario no encontrado" }
+```
+
+### GET /api/users/:id/payments/stats
+
+```json
+// Response 200
+{ "data": { "total_pagos": 10, "aprobados": 8, "rechazados": 2, "monto_total_aprobado": 12500.00, "monto_promedio": 1250.00 } }
+```
+
 ## Colección de Postman
 
 Importar `postman/collection.json` en Postman. Configurar variable `base_url` como `http://localhost:3000`.
 
 Ejecutar en orden:
 1. Crear Usuario
-2. Crear Tarjeta
-3. Crear Pago
-4. Listar Pagos del Usuario
+2. Obtener Usuario
+3. Crear Tarjeta
+4. Crear Pago
+5. Listar Pagos del Usuario
+6. Estadísticas de Pagos
 
 ## Criterios de evaluación cubiertos
 

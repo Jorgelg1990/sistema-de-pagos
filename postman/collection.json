@@ -37,6 +37,31 @@
       }
     },
     {
+      "name": "Obtener Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Tiene data.id', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data.id).to.exist;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/users/{{usuario_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users", "{{usuario_id}}"]
+        }
+      }
+    },
+    {
       "name": "Crear Usuario - Error duplicado",
       "request": {
         "method": "POST",
@@ -135,6 +160,31 @@
           "raw": "{{base_url}}/api/users/{{usuario_id}}/payments",
           "host": ["{{base_url}}"],
           "path": ["api", "users", "{{usuario_id}}", "payments"]
+        }
+      }
+    },
+    {
+      "name": "Estadisticas de Pagos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Tiene total_pagos', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data.total_pagos).to.exist;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/users/{{usuario_id}}/payments/stats",
+          "host": ["{{base_url}}"],
+          "path": ["api", "users", "{{usuario_id}}", "payments", "stats"]
         }
       }
     }
