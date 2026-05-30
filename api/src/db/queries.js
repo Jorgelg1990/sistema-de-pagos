@@ -29,8 +29,33 @@ exports.createCard = async (usuarioId, numeroHash, ultimosDigitos, titular, expi
 };
 
 exports.findCardById = async (id) => {
-  const result = await pool.query('SELECT * FROM tarjetas WHERE id = $1', [id]);
+  const result = await pool.query(
+    'SELECT id, usuario_id, ultimos_digitos, titular, expiracion, created_at FROM tarjetas WHERE id = $1',
+    [id]
+  );
   return result.rows[0] || null;
+};
+
+exports.findCardByHashAndUser = async (numeroHash, usuarioId) => {
+  const result = await pool.query(
+    'SELECT id FROM tarjetas WHERE numero_hash = $1 AND usuario_id = $2',
+    [numeroHash, usuarioId]
+  );
+  return result.rows[0] || null;
+};
+
+exports.getPaymentStats = async (usuarioId) => {
+  const result = await pool.query(
+    `SELECT
+      COUNT(*) AS total_pagos,
+      COUNT(*) FILTER (WHERE estado = 'approved') AS aprobados,
+      COUNT(*) FILTER (WHERE estado = 'rejected') AS rechazados,
+      COALESCE(SUM(monto) FILTER (WHERE estado = 'approved'), 0) AS monto_total_aprobado,
+      COALESCE(AVG(monto), 0) AS monto_promedio
+    FROM pagos WHERE usuario_id = $1`,
+    [usuarioId]
+  );
+  return result.rows[0];
 };
 
 exports.createPayment = async (usuarioId, tarjetaId, monto, estado, mensaje) => {

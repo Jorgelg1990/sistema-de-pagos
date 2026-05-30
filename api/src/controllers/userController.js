@@ -1,5 +1,4 @@
 const { validationResult } = require('express-validator');
-const crypto = require('crypto');
 const db = require('../db/queries');
 
 exports.createUser = async (req, res, next) => {
@@ -18,6 +17,26 @@ exports.createUser = async (req, res, next) => {
 
     const user = await db.createUser(nombre, email);
     res.status(201).json({ data: user });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getUser = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array().map(e => e.msg).join(', ') });
+    }
+
+    const id = parseInt(req.params.id, 10);
+    const user = await db.findUserById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ data: user });
   } catch (err) {
     next(err);
   }

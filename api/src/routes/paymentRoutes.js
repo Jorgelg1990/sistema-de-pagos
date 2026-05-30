@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { body, param } = require('express-validator');
+const { body } = require('express-validator');
 const controller = require('../controllers/paymentController');
 
 const router = Router();
@@ -15,14 +15,6 @@ router.post(
       .isFloat({ gt: 0 }).withMessage('monto debe ser un número positivo'),
   ],
   controller.createPayment
-);
-
-router.get(
-  '/:id/payments',
-  [
-    param('id').isInt().withMessage('id debe ser un número entero'),
-  ],
-  controller.getPayments
 );
 
 module.exports = router;

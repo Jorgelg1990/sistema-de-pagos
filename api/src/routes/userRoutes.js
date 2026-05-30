@@ -1,6 +1,7 @@
 const { Router } = require('express');
-const { body } = require('express-validator');
-const controller = require('../controllers/userController');
+const { body, param } = require('express-validator');
+const userController = require('../controllers/userController');
+const paymentController = require('../controllers/paymentController');
 
 const router = Router();
 
@@ -15,7 +16,31 @@ router.post(
       .isEmail().withMessage('email debe ser un correo válido')
       .normalizeEmail(),
   ],
-  controller.createUser
+  userController.createUser
+);
+
+router.get(
+  '/:id',
+  [
+    param('id').isInt().withMessage('id debe ser un número entero'),
+  ],
+  userController.getUser
+);
+
+router.get(
+  '/:id/payments',
+  [
+    param('id').isInt().withMessage('id debe ser un número entero'),
+  ],
+  paymentController.getPayments
+);
+
+router.get(
+  '/:id/payments/stats',
+  [
+    param('id').isInt().withMessage('id debe ser un número entero'),
+  ],
+  paymentController.getPaymentStats
 );
 
 module.exports = router;

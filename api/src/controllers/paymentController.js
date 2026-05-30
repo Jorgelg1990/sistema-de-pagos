@@ -58,3 +58,19 @@ exports.getPayments = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getPaymentStats = async (req, res, next) => {
+  try {
+    const usuarioId = parseInt(req.params.id, 10);
+
+    const user = await db.findUserById(usuarioId);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const stats = await db.getPaymentStats(usuarioId);
+    res.json({ data: stats });
+  } catch (err) {
+    next(err);
+  }
+};
