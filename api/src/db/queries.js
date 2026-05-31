@@ -47,11 +47,11 @@ exports.findCardByHashAndUser = async (numeroHash, usuarioId) => {
 exports.getPaymentStats = async (usuarioId) => {
   const result = await pool.query(
     `SELECT
-      COUNT(*) AS total_pagos,
-      COUNT(*) FILTER (WHERE estado = 'approved') AS aprobados,
-      COUNT(*) FILTER (WHERE estado = 'rejected') AS rechazados,
-      COALESCE(SUM(monto) FILTER (WHERE estado = 'approved'), 0) AS monto_total_aprobado,
-      COALESCE(AVG(monto), 0) AS monto_promedio
+      COUNT(*)::int AS total_pagos,
+      COUNT(*) FILTER (WHERE estado = 'approved')::int AS aprobados,
+      COUNT(*) FILTER (WHERE estado = 'rejected')::int AS rechazados,
+      COALESCE(SUM(monto) FILTER (WHERE estado = 'approved'), 0)::numeric AS monto_total_aprobado,
+      COALESCE(AVG(monto), 0)::numeric AS monto_promedio
     FROM pagos WHERE usuario_id = $1`,
     [usuarioId]
   );

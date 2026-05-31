@@ -9,7 +9,9 @@ exports.createPayment = async (req, res, next) => {
       return res.status(400).json({ error: errors.array().map(e => e.msg).join(', ') });
     }
 
-    const { usuario_id, tarjeta_id, monto } = req.body;
+    const usuario_id = parseInt(req.body.usuario_id, 10);
+    const tarjeta_id = parseInt(req.body.tarjeta_id, 10);
+    const monto = parseFloat(req.body.monto);
 
     const user = await db.findUserById(usuario_id);
     if (!user) {
@@ -45,6 +47,11 @@ exports.createPayment = async (req, res, next) => {
 
 exports.getPayments = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array().map(e => e.msg).join(', ') });
+    }
+
     const usuarioId = parseInt(req.params.id, 10);
 
     const user = await db.findUserById(usuarioId);
@@ -61,6 +68,11 @@ exports.getPayments = async (req, res, next) => {
 
 exports.getPaymentStats = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array().map(e => e.msg).join(', ') });
+    }
+
     const usuarioId = parseInt(req.params.id, 10);
 
     const user = await db.findUserById(usuarioId);
