@@ -26,5 +26,6 @@ CREATE TABLE IF NOT EXISTS pagos (
 );
 
 CREATE INDEX IF NOT EXISTS idx_tarjetas_usuario ON tarjetas(usuario_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_tarjetas_hash_usuario ON tarjetas(numero_hash, usuario_id);
 CREATE INDEX IF NOT EXISTS idx_pagos_usuario ON pagos(usuario_id);
 CREATE INDEX IF NOT EXISTS idx_pagos_estado ON pagos(estado);

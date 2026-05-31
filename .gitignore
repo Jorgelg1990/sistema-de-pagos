@@ -14,5 +14,7 @@ Thumbs.db
 # Project files to exclude
 AGENTS.md
 prueba_tecnica_backend.pdf
+analisis_tecnico.pdf
+analisis_resultado.pdf
 
 opencode.json
