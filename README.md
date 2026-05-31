@@ -63,6 +63,10 @@ npm run dev
 { "nombre": "Juan Pérez", "email": "juan@example.com" }
 // Response 201
 { "data": { "id": 1, "nombre": "Juan Pérez", "email": "juan@example.com", "created_at": "..." } }
+// Response 400 — validación
+{ "error": "nombre debe ser un texto, email debe ser un correo válido" }
+// Response 409 — email duplicado
+{ "error": "El email ya está registrado" }
 ```
 
 ### POST /api/users/:id/cards
@@ -72,6 +76,10 @@ npm run dev
 { "numero": "4111111111111111", "titular": "Juan Pérez", "expiracion": "12/2028", "cvv": "123" }
 // Response 201 (CVV y número no se almacenan; solo hash + últimos 4 dígitos)
 { "data": { "id": 1, "ultimos_digitos": "1111", "titular": "Juan Pérez", "expiracion": "12/2028" } }
+// Response 400 — tarjeta vencida
+{ "error": "La tarjeta ya está vencida" }
+// Response 409 — tarjeta duplicada
+{ "error": "La tarjeta ya está registrada para este usuario" }
 ```
 
 ### POST /api/payments
@@ -81,6 +89,8 @@ npm run dev
 { "usuario_id": 1, "tarjeta_id": 1, "monto": 1500.50 }
 // Response 201
 { "data": { "id": 1, "usuario_id": 1, "tarjeta_id": 1, "monto": 1500.50, "estado": "approved", "mensaje": "Pago procesado correctamente", "created_at": "..." } }
+// Response 400 — tarjeta no pertenece al usuario
+{ "error": "La tarjeta no pertenece al usuario" }
 ```
 
 ### GET /api/users/:id/payments
@@ -88,6 +98,8 @@ npm run dev
 ```json
 // Response 200
 { "data": [ { "id": 1, "monto": 1500.50, "estado": "approved", "mensaje": "...", "created_at": "..." } ] }
+// Response 404 — usuario no existe
+{ "error": "Usuario no encontrado" }
 ```
 
 ### GET /api/users/:id
@@ -104,6 +116,8 @@ npm run dev
 ```json
 // Response 200
 { "data": { "total_pagos": 10, "aprobados": 8, "rechazados": 2, "monto_total_aprobado": 12500.00, "monto_promedio": 1250.00 } }
+// Response 404 — usuario no existe
+{ "error": "Usuario no encontrado" }
 ```
 
 ## Colección de Postman

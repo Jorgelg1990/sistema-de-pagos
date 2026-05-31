@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { body, param } = require('express-validator');
 const userController = require('../controllers/userController');
-const paymentController = require('../controllers/paymentController');
 
 const router = Router();
 
@@ -25,22 +24,6 @@ router.get(
     param('id').isInt().withMessage('id debe ser un número entero'),
   ],
   userController.getUser
-);
-
-router.get(
-  '/:id/payments',
-  [
-    param('id').isInt().withMessage('id debe ser un número entero'),
-  ],
-  paymentController.getPayments
-);
-
-router.get(
-  '/:id/payments/stats',
-  [
-    param('id').isInt().withMessage('id debe ser un número entero'),
-  ],
-  paymentController.getPaymentStats
 );
 
 module.exports = router;

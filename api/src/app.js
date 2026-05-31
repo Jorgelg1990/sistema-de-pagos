@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/users', cardRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api', paymentRoutes);
 
 app.use(errorHandler);
 
